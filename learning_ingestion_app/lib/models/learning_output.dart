@@ -2,11 +2,13 @@ class LearningOutput {
   final String summary;
   final List<Flashcard> flashcards;
   final Map<String, List<String>> topics;
+  // final List<LearningNode> learningPath;
 
   LearningOutput({
     required this.summary,
     required this.flashcards,
     required this.topics,
+    // required this.learningPath,
   });
 
   factory LearningOutput.fromJson(Map<String, dynamic> json) {

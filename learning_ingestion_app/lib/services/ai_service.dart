@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AIService {
-  // ← Yaha paste karo
-  static const String _apiKey = 'AIzaSyAkQPsSKeLKHYvCMX18CO05P-G9I2W4fr0';
+  static const String _apiKey = 'AIzaSyDv07YevmBQZ5SMAIFZfRqKFxAEW_K1jSo';
 
-  /// Real AI call
   Future<Map<String, dynamic>> generateLearningMaterial(String inputText) async {
     print("🔥 generateLearningMaterial CALLED");
     final url = Uri.parse(
@@ -23,7 +21,30 @@ Return ONLY valid JSON in this format:
   "topics": {
     "Topic": ["Subtopic1", "Subtopic2"]
   }
+  
+  "learningPath": [
+    {
+      "id": 1,
+      "title": "Basic Concept",
+      "parentId": null
+    },
+    {
+      "id": 2,
+      "title": "Intermediate Concept",
+      "parentId": 1
+    },
+    {
+      "id": 3,
+      "title": "Advanced Concept",
+      "parentId": 2
+    }
+  ]
 }
+Rules:
+- learningPath must be ordered from basic to advanced
+- parentId = null means root topic
+- Do not include explanations or markdown
+- Return only JSON
 
 Content:
 $inputText
@@ -51,7 +72,6 @@ $inputText
 
     print("🧾 RAW AI TEXT: $rawText");
 
-// 🔥 Remove markdown
     final cleanedText = rawText
         .replaceAll('```json', '')
         .replaceAll('```', '')
@@ -60,6 +80,6 @@ $inputText
     print("✅ CLEAN JSON: $cleanedText");
 
     return jsonDecode(cleanedText);
-    ;
+
   }
 }

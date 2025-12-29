@@ -12,6 +12,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _controller = TextEditingController();
+  String? selectedPdfName;
+  String? selectedPdfPath;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +35,67 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  selectedPdfName = null;
+                  selectedPdfPath = null;
+                });
+
+                final pdfPath = await pickPDF();
+
+                if (pdfPath != null) {
+                  setState(() {
+                    selectedPdfPath = pdfPath;
+                    selectedPdfName = pdfPath.split('/').last; // 📄 filename
+                  });
+
+                  final pdfText = await extractTextFromPDF(pdfPath);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ResultScreen(userText: pdfText),
+                    ),
+                  );
+                  setState(() {
+                    selectedPdfName = null;
+                    selectedPdfPath = null;
+                  });
+
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("No PDF selected")),
+                  );
+                }
+              },
+              child: const Text('Choose PDF'),
+            ),
+            if (selectedPdfName != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.picture_as_pdf, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        selectedPdfName!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+
+
+            const SizedBox(height: 16,),
+
+            ElevatedButton(
               onPressed: () {
                 if (_controller.text.trim().isEmpty) return;
 
@@ -48,26 +112,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: 16,),
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     final pdfPath = await pickPDF();
-            //     if (pdfPath != null) {
-            //       final pdfText = await extractTextFromPDF(pdfPath);
-            //       // Ab pdfText ko ResultScreen me bhej do
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (_) => ResultScreen(userText: pdfText),
-            //         ),
-            //       );
-            //     } else {
-            //       ScaffoldMessenger.of(context).showSnackBar(
-            //         const SnackBar(content: Text("No PDF selected")),
-            //       );
-            //     }
-            //   },
-            //   child: const Text('Choose PDF'),
-            // ),
 
           ],
         ),

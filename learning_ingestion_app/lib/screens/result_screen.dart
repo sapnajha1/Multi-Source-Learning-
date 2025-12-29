@@ -15,7 +15,7 @@ class _ResultScreenState extends State<ResultScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   LearningOutput? output;
-  bool isLoading = false; // initially false, loader only when AI call
+  bool isLoading = false;
 
   @override
   void initState() {
