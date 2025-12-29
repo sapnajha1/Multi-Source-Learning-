@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AIService {
-  static const String _apiKey = 'AIzaSyDv07YevmBQZ5SMAIFZfRqKFxAEW_K1jSo';
+  static const String _apiKey = 'API-KEY';
 
   Future<Map<String, dynamic>> generateLearningMaterial(String inputText) async {
     print("🔥 generateLearningMaterial CALLED");
